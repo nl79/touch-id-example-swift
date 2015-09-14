@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		559635A31BA7265100E14AE0 /* LocalAuthentication.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 559635A21BA7265100E14AE0 /* LocalAuthentication.framework */; };
 		55EB05611BA5F18C0062E6C6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB05601BA5F18C0062E6C6 /* AppDelegate.swift */; };
 		55EB05631BA5F18C0062E6C6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EB05621BA5F18C0062E6C6 /* ViewController.swift */; };
 		55EB05661BA5F18C0062E6C6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 55EB05641BA5F18C0062E6C6 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		559635A21BA7265100E14AE0 /* LocalAuthentication.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = LocalAuthentication.framework; path = System/Library/Frameworks/LocalAuthentication.framework; sourceTree = SDKROOT; };
 		55EB055B1BA5F18C0062E6C6 /* touch-id-example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "touch-id-example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		55EB055F1BA5F18C0062E6C6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55EB05601BA5F18C0062E6C6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -45,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				559635A31BA7265100E14AE0 /* LocalAuthentication.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,6 +64,7 @@
 		55EB05521BA5F18C0062E6C6 = {
 			isa = PBXGroup;
 			children = (
+				559635A21BA7265100E14AE0 /* LocalAuthentication.framework */,
 				55EB055D1BA5F18C0062E6C6 /* touch-id-example */,
 				55EB05731BA5F18C0062E6C6 /* touch-id-exampleTests */,
 				55EB055C1BA5F18C0062E6C6 /* Products */,
@@ -415,6 +419,7 @@
 				55EB057C1BA5F18C0062E6C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		55EB057D1BA5F18C0062E6C6 /* Build configuration list for PBXNativeTarget "touch-id-exampleTests" */ = {
 			isa = XCConfigurationList;
@@ -423,6 +428,7 @@
 				55EB057F1BA5F18C0062E6C6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
