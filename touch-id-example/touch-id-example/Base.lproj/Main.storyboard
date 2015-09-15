@@ -76,7 +76,7 @@
                     <navigationItem key="navigationItem" title="My Notes" id="YBe-I8-EuM">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="vO9-ye-vJo">
                             <connections>
-                                <segue destination="akl-Rb-4LU" kind="show" id="LWN-oC-waq"/>
+                                <segue destination="akl-Rb-4LU" kind="show" identifier="idSegueEditNote" id="LWN-oC-waq"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

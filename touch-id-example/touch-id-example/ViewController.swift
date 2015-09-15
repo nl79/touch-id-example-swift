@@ -64,10 +64,15 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController. 
         // Pass the seleted object to the new view controller. 
+        println("prepareForSegue()");
+        
+        println(segue.identifier);
         
         if (segue.identifier == "idSegueEditNote") {
             var editNoteViewController: EditNoteViewController = segue.destinationViewController as! EditNoteViewController;
             editNoteViewController.delegate = self;
+            
+            println("editNoteViewController.delegate");
             
             if(noteIndexToEdit != nil) {
                 editNoteViewController.indexOfEditedNote = noteIndexToEdit;
