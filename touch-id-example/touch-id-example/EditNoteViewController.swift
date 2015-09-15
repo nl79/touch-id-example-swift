@@ -8,21 +8,45 @@
 
 import UIKit
 
-class EditNoteViewController: UIViewController {
+class EditNoteViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var txtNoteTitle: UITextField!
     
     @IBOutlet weak var tvNoteBody: UITextView!
+    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        self.txtNoteTitle.becomeFirstResponder();
+        
+        txtNoteTitle.delegate = self;
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        //Resign the textfield from first responder. 
+        textField.resignFirstResponder();
+        
+        //Make the textview the first responder. 
+        tvNoteBody.becomeFirstResponder();
+        
+        return true;
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    @IBAction func saveNote(sender: AnyObject) {
+        if self.txtNoteTitle.text.isEmpty {
+            println("No Title for the note was typed.");
+            return; 
+        }
     }
     
 

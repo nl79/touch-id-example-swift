@@ -170,7 +170,11 @@
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Edit Note" id="I2j-eS-bvs">
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="OuM-bR-u3X"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="OuM-bR-u3X">
+                            <connections>
+                                <action selector="saveNote:" destination="akl-Rb-4LU" id="FM1-o1-pC0"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
