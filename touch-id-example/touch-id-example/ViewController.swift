@@ -9,12 +9,19 @@
 import UIKit
 import LocalAuthentication
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, EditNoteViewControllerDelegate {
     
+    /*******TEMP TEST CODE*********/
     let password: String? = "password";
+    /******************************/
+    
     var loginAttempts: Int? = 0;
     
     @IBOutlet weak var tblNotes: UITableView!
+    
+    let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate;
+    var dataArray: NSMutableArray = NSMutableArray();
+    var noteIndexToEdit: Int!;
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +29,31 @@ class ViewController: UIViewController {
         
         //call the authentcation method.
         authenticateUser();
+        
+        tblNotes.delegate = self;
+        tblNotes.dataSource = self;
+        
+    }
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 1;
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return dataArray.count;
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        var cell = tableView.dequeueReusableCellWithIdentifier("idCell") as! UITableViewCell;
+        
+        let currentNote = self.dataArray.objectAtIndex(indexPath.row) as! Dictionary<String, String>
+        cell.textLabel!.text = currentNote["title"]
+        
+        return cell;
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        return 60.0; 
     }
 
     override func didReceiveMemoryWarning() {
@@ -29,8 +61,44 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        // Get the new view controller using segue.destinationViewController. 
+        // Pass the seleted object to the new view controller. 
+        
+        if (segue.identifier == "idSegueEditNote") {
+            var editNoteViewController: EditNoteViewController = segue.destinationViewController as! EditNoteViewController;
+            editNoteViewController.delegate = self;
+            
+            if(noteIndexToEdit != nil) {
+                editNoteViewController.indexOfEditedNote = noteIndexToEdit;
+                
+                noteIndexToEdit = nil; 
+            }
+        }
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        noteIndexToEdit = indexPath.row;
+        
+        performSegueWithIdentifier("idSegueEditNote", sender: self); 
+    }
+    
+    func loadData() {
+        if (appDelegate.checkIfDataFileExists()) {
+            self.dataArray = NSMutableArray(contentsOfFile: appDelegate.getPathOfDataFile())!;
+            self.tblNotes.reloadData();
+        } else {
+            println("Notes File does not exist");
+        }
+    }
+    
+    func noteWasSaved() {
+        loadData();
+    }
+    
     func loginSuccess() {
         print("LOGGED IN SUCCESSFULLY");
+        loadData();
     }
     
     func showPasswordAlert() {
@@ -60,7 +128,10 @@ class ViewController: UIViewController {
             if(passwordField != nil && passwordField?.text !== "") {
                 //if the password matches call on the sucess method. 
                 if(passwordField?.text == self.password) {
-                    self.loginSuccess();
+                    //self.loginSuccess();
+                    NSOperationQueue.currentQueue()?.addOperationWithBlock({() -> Void in
+                        self.loginSuccess();
+                    });
                     return;
                 }
             }
@@ -94,6 +165,9 @@ class ViewController: UIViewController {
                 if (success) {
                     
                     //call the appropriate method on valid login.
+                    NSOperationQueue.mainQueue().addOperationWithBlock({() -> Void in
+                        self.loginSuccess();
+                    });
                     
                 } else {
                     //Show a message if authentication failed. 

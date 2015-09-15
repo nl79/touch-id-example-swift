@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol EditNoteViewControllerDelegate {
+    func noteWasSaved();
+}
+
 class EditNoteViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var txtNoteTitle: UITextField!
@@ -16,6 +20,9 @@ class EditNoteViewController: UIViewController, UITextFieldDelegate {
     
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     
+    var delegate: EditNoteViewControllerDelegate?;
+    
+    var indexOfEditedNote: Int!; 
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +34,12 @@ class EditNoteViewController: UIViewController, UITextFieldDelegate {
         txtNoteTitle.delegate = self;
     }
     
+    override func viewDidAppear(animated: Bool) {
+        if(indexOfEditedNote != nil) {
+            editNote();
+        }
+    }
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         //Resign the textfield from first responder. 
         textField.resignFirstResponder();
@@ -36,6 +49,20 @@ class EditNoteViewController: UIViewController, UITextFieldDelegate {
         
         return true;
     }
+    
+    func editNote() {
+        //Load All notes. 
+        var notesArray: NSArray = NSArray(contentsOfFile: appDelegate.getPathOfDataFile())!;
+        
+        //get the dictionary at the specified index. 
+        let noteDict: Dictionary = notesArray.objectAtIndex(indexOfEditedNote) as! Dictionary<String, String>;
+        
+        //set the textfield text. 
+        txtNoteTitle.text = noteDict["title"];
+        
+        //Set the textview text. 
+        tvNoteBody.text = noteDict["body"];
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -43,10 +70,47 @@ class EditNoteViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func saveNote(sender: AnyObject) {
+        
+        //check if the textNoteTitle is empty.
         if self.txtNoteTitle.text.isEmpty {
             println("No Title for the note was typed.");
             return; 
         }
+        
+        //Create a dictionary with the note data. 
+        var noteDict = ["title": self.txtNoteTitle.text, "body":self.tvNoteBody.text];
+        
+        //Declare a NSMutableArray object. 
+        var dataArray: NSMutableArray;
+        
+        //If the notes data file exists, then load its contentts and add the new. 
+        if (appDelegate.checkIfDataFileExists()) {
+            //load any existing notes. 
+            dataArray = NSMutableArray(contentsOfFile: appDelegate.getPathOfDataFile())!;
+            
+            //Add the dictionary to the array. 
+            //dataArray.addObject(noteDict);
+            //check if editing a note or not. 
+            if(indexOfEditedNote == nil) {
+                // Add the dictionary to the array. 
+                dataArray.addObject(noteDict);
+            } else {
+                //replace the existing dictionary in the array. 
+                dataArray.replaceObjectAtIndex(indexOfEditedNote, withObject: noteDict); 
+            }
+        } else {
+            // Create a new mutable array and add the noteDict object it. 
+            dataArray = NSMutableArray(object: noteDict);
+        }
+        
+        //Save the array contets to file. 
+        dataArray.writeToFile(appDelegate.getPathOfDataFile(), atomically: true);
+        
+        //Notify the delegate class that the note has been saved. 
+        delegate?.noteWasSaved(); 
+        
+        //pop the view controller. 
+        self.navigationController!.popViewControllerAnimated(true);
     }
     
 
