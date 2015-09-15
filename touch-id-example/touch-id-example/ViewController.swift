@@ -11,6 +11,9 @@ import LocalAuthentication
 
 class ViewController: UIViewController {
     
+    let password: String? = "password";
+    var loginAttempts: Int? = 0;
+    
     @IBOutlet weak var tblNotes: UITableView!
 
     override func viewDidLoad() {
@@ -26,9 +29,13 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    func loginSuccess() {
+        print("LOGGED IN SUCCESSFULLY");
+    }
+    
     func showPasswordAlert() {
         
-        var passwordField: UITextField?
+        var passwordField: UITextField?;
         
         var passwordAlert: UIAlertController = UIAlertController(title: "Title", message: "Message", preferredStyle: UIAlertControllerStyle.Alert)
         
@@ -40,10 +47,27 @@ class ViewController: UIViewController {
             passwordField = textField;
         });
        
+        //set the Login button view and handler closure.
         passwordAlert.addAction(UIAlertAction(title: "Login", style: UIAlertActionStyle.Default, handler: { action in
-            //print(action);
-            //print(passwordField);
-            print(passwordField?.text);
+            
+            println(passwordField?.text);
+            println(self.loginAttempts);
+            
+            //increment the login attempt.
+            self.loginAttempts?++;
+            
+            //if the password value is not empty validate the password.
+            if(passwordField != nil && passwordField?.text !== "") {
+                //if the password matches call on the sucess method. 
+                if(passwordField?.text == self.password) {
+                    self.loginSuccess();
+                    return;
+                }
+            }
+            
+            //If the user didnt enter a password, display the promt again. 
+            self.showPasswordAlert();
+            
             
         }));
         passwordAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.Cancel, handler: { action in
@@ -68,6 +92,8 @@ class ViewController: UIViewController {
         if(context.canEvaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, error: &error)) {
             [context .evaluatePolicy(LAPolicy.DeviceOwnerAuthenticationWithBiometrics, localizedReason: reasonString, reply: { (success: Bool, evalPolicyError: NSError?) -> Void in
                 if (success) {
+                    
+                    //call the appropriate method on valid login.
                     
                 } else {
                     //Show a message if authentication failed. 
