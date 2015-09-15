@@ -107,7 +107,9 @@ class EditNoteViewController: UIViewController, UITextFieldDelegate {
         dataArray.writeToFile(appDelegate.getPathOfDataFile(), atomically: true);
         
         //Notify the delegate class that the note has been saved. 
-        delegate?.noteWasSaved(); 
+        delegate?.noteWasSaved();
+        println(delegate);
+        println("saveNote()- Was Saved");
         
         //pop the view controller. 
         self.navigationController!.popViewControllerAnimated(true);

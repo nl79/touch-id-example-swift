@@ -77,6 +77,20 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         }
     }
     
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            //Delete the object from the data array. 
+            dataArray.removeObjectAtIndex(indexPath.row);
+            
+            //Save the array to disk
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate;
+            dataArray.writeToFile(appDelegate.getPathOfDataFile(), atomically: true);
+            
+            //Reload the tableview. 
+            tblNotes.reloadSections(NSIndexSet(index: 0), withRowAnimation: UITableViewRowAnimation.Automatic);
+        }
+    }
+    
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         noteIndexToEdit = indexPath.row;
         
@@ -93,6 +107,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func noteWasSaved() {
+        println("noteWasSaved()");
         loadData();
     }
     
